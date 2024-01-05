@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Objects;
 
 @Entity
+@Table (name="items")
 public class Items {
     private @Id @GeneratedValue Long id;
     private String origin_name;
