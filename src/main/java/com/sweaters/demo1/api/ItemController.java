@@ -1,13 +1,16 @@
-package com.sweaters.demo1;
+package com.sweaters.demo1.api;
 
+import com.sweaters.demo1.domain.Items;
+import com.sweaters.demo1.exceptions.ItemsNotFoundException;
+import com.sweaters.demo1.repository.ItemsRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -37,7 +40,7 @@ public class ItemController {
                 .orElseThrow(()->new ItemsNotFoundException(Id));
         return assembler.toModel(item);
     }
-    @PostMapping("/items")
+    @PostMapping(value="/items",consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<?> new_item(@RequestBody Items item)
     {
         Items new_items= new Items(item.getOrigin_name(),item.getPrice());

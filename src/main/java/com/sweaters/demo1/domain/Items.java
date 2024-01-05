@@ -1,4 +1,4 @@
-package com.sweaters.demo1;
+package com.sweaters.demo1.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,5 +1,6 @@
-package com.sweaters.demo1;
+package com.sweaters.demo1.service;
 
+import com.sweaters.demo1.exceptions.ItemsNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
