@@ -1,0 +1,1 @@
+ALTER TABLE 'Items' ADD 'Seller_id' int AFTER 'id';

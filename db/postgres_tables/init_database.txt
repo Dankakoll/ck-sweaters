@@ -1,0 +1,19 @@
+CREATE TABLE Items(
+ id serial not null primary key,
+ origin_name varchar(30),
+ price decimal (6,2),
+ updated_at timestamp
+);
+Добавить потом вторичные ключи ( если потребуется)
+ CREATE TABLE Sellers(
+               id serial not null primary key,
+	       seller_name varchar(30),
+               origin varchar(30),
+               origin_rate decimal (6,2)
+	       );
+CREATE TABLE Users(
+ id serial not null primary key,
+ login varchar(30),
+ password varchar (40),
+ email varchar (40)
+);
