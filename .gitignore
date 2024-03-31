@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+report.html
+report.json

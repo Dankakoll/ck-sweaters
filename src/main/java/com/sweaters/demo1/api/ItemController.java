@@ -1,8 +1,10 @@
 package com.sweaters.demo1.api;
 
 import com.sweaters.demo1.domain.Items;
+import com.sweaters.demo1.domain.Sellers;
 import com.sweaters.demo1.exceptions.ItemsNotFoundException;
 import com.sweaters.demo1.repository.ItemsRepository;
+import com.sweaters.demo1.repository.SellersRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -20,8 +22,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class ItemController {
 
     private final ItemsRepository repository;
+
     private final ItemModelAssembler assembler;
-    ItemController(ItemsRepository repository, ItemModelAssembler assembler)
+    ItemController(ItemsRepository repository, SellersRepository repositorySell, ItemModelAssembler assembler)
     {
         this.repository=repository;
         this.assembler=assembler;

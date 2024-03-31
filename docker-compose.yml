@@ -1,4 +1,13 @@
+version: '2.1'
 services:
+  flyway:
+    image: flyway/flyway:9.2.0
+    command: -url=jdbc:postgresql://db1:5432/Items -user=user -password=pass -configFiles=/flyway/conf/flyway.conf -locations=filesystem:/flyway/sql migrate
+    volumes:
+      - ./src/main/resources/db/migration:/flyway/sql
+      - ./docker-flyway.config:/flyway/conf/flyway.config
+    depends_on:
+      - db1
   db1:
     image: postgres
     restart: always
