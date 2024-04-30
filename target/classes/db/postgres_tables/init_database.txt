@@ -5,11 +5,7 @@ CREATE TABLE Items(
  updated_at timestamp
 );
 Добавить потом вторичные ключи ( если потребуется)
-<<<<<<< HEAD
 CREATE TABLE IF NOT EXISTS Sellers(
-=======
- CREATE TABLE Sellers(
->>>>>>> d831525c34c6c1da609cddd1e143abb920ea39bb
                id serial not null primary key,
 	       seller_name varchar(30),
                origin varchar(30),

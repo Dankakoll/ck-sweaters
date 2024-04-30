@@ -1,0 +1,21 @@
+databaseType = "PostgreSql"
+name = "flyway"
+id = "da669b31-6e49-443e-9e26-03e9f6db75b9"
+
+[flywayDesktop]
+developmentEnvironment = "development"
+shadowEnvironment = "shadow"
+schemaModel = "schema-model"
+enableMigrations = true
+
+[flyway]
+locations = ["classpath:db/migration"]
+
+[environments.development]
+schemas = ["Items"]
+
+[redgateCompare]
+filterFile = "filter.rgf"
+
+[redgateCompare.postgresql.options.ignores]
+ignoreNewlinesInTextObjects = "off"
