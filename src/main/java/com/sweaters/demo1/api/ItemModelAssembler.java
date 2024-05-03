@@ -1,6 +1,7 @@
 package com.sweaters.demo1.api;
 
 import com.sweaters.demo1.domain.Items;
+import com.sweaters.demo1.domain.Prices;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;

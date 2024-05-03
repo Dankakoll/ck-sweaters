@@ -6,12 +6,16 @@
 package com.sweaters.demo1.api;
 
 import com.sweaters.demo1.domain.Items;
+import com.sweaters.demo1.domain.Prices;
 import com.sweaters.demo1.exceptions.ItemsNotFoundException;
 import com.sweaters.demo1.repository.ItemsRepository;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.sweaters.demo1.repository.PricesRepository;
+import org.hibernate.type.EntityType;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.IanaLinkRelations;
@@ -34,9 +38,11 @@ public class ItemController {
     private final ItemsRepository repository;
     private final ItemModelAssembler assembler;
 
-    ItemController(ItemsRepository itemsRepository, ItemModelAssembler itemsAssembler) {
+    private final PricesRepository pricesRepository;
+    ItemController(ItemsRepository itemsRepository, ItemModelAssembler itemsAssembler,PricesRepository pricesRepository) {
         this.repository = itemsRepository;
         this.assembler = itemsAssembler;
+        this.pricesRepository= pricesRepository;
     }
 
     @GetMapping({"/items"})
@@ -52,14 +58,35 @@ public class ItemController {
                 .orElseThrow(()->new ItemsNotFoundException(Id));
         return assembler.toModel(item);
     }
+    @GetMapping ("/items/{Id}/prices")
+    List<Prices> allPricesById(@PathVariable Long Id)
+    {
+        Items item = repository.findById(Id)
+                .orElseThrow(()->new ItemsNotFoundException(Id));
+        List<Prices> prices= pricesRepository.findBySecondKey(item.getOrigin(),item.getOrigin_id());
+        return prices;
 
+    }
     @PostMapping(
             value = {"/items"},
             consumes = {"application/json"}
     )
     ResponseEntity<?> new_item(@RequestBody Items item) {
-        Items new_items = new Items(item.getItems_name(), item.getPrice(), item.getOrigin(), item.getOrigin_id());
-        EntityModel<Items> entityModel = this.assembler.toModel(repository.save(new_items));
+        Items existing_item = repository.findBySecondKey(item.getOrigin(), item.getOrigin_id());
+        Items items;
+        if(existing_item == null)
+        {
+            items = new Items (item.getItems_name(), item.getPrice(), item.getOrigin(), item.getOrigin_id());
+        }
+        else
+        {
+            existing_item.setUpdated_at(item.getUpdated_at());
+            existing_item.setPrice(item.getPrice());
+            items = existing_item;
+        }
+        Prices prices = new Prices(items.getPrice(),items.getOrigin(),items.getOrigin_id(),items.getUpdated_at());
+        pricesRepository.save(prices);
+        EntityModel<Items> entityModel = this.assembler.toModel(repository.save(items));
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
 

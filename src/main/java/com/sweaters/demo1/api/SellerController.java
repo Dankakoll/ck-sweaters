@@ -1,7 +1,9 @@
 package com.sweaters.demo1.api;
 
+import com.sweaters.demo1.domain.Items;
 import com.sweaters.demo1.domain.Sellers;
 import com.sweaters.demo1.exceptions.ItemsNotFoundException;
+import com.sweaters.demo1.exceptions.SellersNotFoundException;
 import com.sweaters.demo1.repository.SellersRepository;
 import java.util.List;
 import java.util.Objects;
@@ -36,15 +38,16 @@ public class SellerController {
 
     @GetMapping({"/sellers"})
     CollectionModel<EntityModel<Sellers>> all() {
-        List<EntityModel<Sellers>> items = repository.findAll().stream()
+        List<EntityModel<Sellers>> sellers = repository.findAll().stream()
                 .map(assembler :: toModel).collect(Collectors.toList());
-        return CollectionModel.of (items,linkTo(methodOn(ItemController.class).all()).withSelfRel());
+        return CollectionModel.of (sellers,linkTo(methodOn(SellerController.class).all()).withSelfRel());
     }
 
     @GetMapping({"/sellers/{Id}"})
     EntityModel<Sellers> findById(@PathVariable Long Id) {
-        Sellers sellers = repository.findById(Id).orElseThrow(() -> new ItemsNotFoundException(Id));
-        return this.assembler.toModel(sellers);
+        Sellers sellers = repository.findById(Id)
+                .orElseThrow(() -> new SellersNotFoundException(Id));
+        return assembler.toModel(sellers);
     }
 
     @PostMapping(
@@ -52,7 +55,34 @@ public class SellerController {
             consumes = {"application/json"}
     )
     ResponseEntity<?> new_seller(@RequestBody Sellers sellers) {
-        EntityModel<Sellers> entityModel = this.assembler.toModel(repository.save(sellers));
-        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+        Sellers exs_seller = repository.findBySecondKey(sellers.getOrigin(),sellers.getOrigin_id());
+        EntityModel<Sellers> entityModel;
+        if (exs_seller == null)
+        {
+            entityModel = this.assembler.toModel(repository.save(sellers));
+            return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
+        }
+        return ResponseEntity.noContent().build();
+
+    }
+    @GetMapping("/sellers/find_seller_by_name/{Seller_name}")
+    CollectionModel<EntityModel<Sellers>> findBySeller_nameLike(@PathVariable String Seller_name)
+    {
+        String Seller_name_with_upcase = Character.toUpperCase(Seller_name.charAt(0)) + Seller_name
+                .substring(1);
+        String ans_string="";
+        if (Seller_name.charAt(0)==Character.toUpperCase(Seller_name.charAt(0)) && Seller_name.charAt(0)!=' ')
+        {
+            ans_string = Seller_name + '%';
+        }
+        else
+        {
+            ans_string = '%' + Seller_name +'%';
+        }
+        List<EntityModel<Sellers>> sellers =repository.findBySeller_name(ans_string).stream().map(
+                assembler::toModel).collect(Collectors.toList());
+
+        return CollectionModel.of (sellers,linkTo(methodOn(SellerController.class).all()).withSelfRel());
+
     }
 }
