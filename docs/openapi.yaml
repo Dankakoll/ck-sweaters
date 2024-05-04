@@ -1,0 +1,324 @@
+openapi: 3.0.3
+info:
+  title: Pseudo dscounts API
+  description: API for Pseudo dscounts
+  version: 0.0.1
+
+
+paths:
+  /items:
+    get:
+      tags:
+        - Items
+      summary: Get list items.
+      parameters:
+        - $ref: '#/components/parameters/Order'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
+        400:
+          $ref: "#/components/schemas/Error"
+        500:
+          $ref: "#/components/schemas/Error"
+          
+    post:
+      tags:
+        - Items
+      summary: Create item.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        400:
+          $ref: "#/components/schemas/Error"
+        500:
+          $ref: "#/components/schemas/Error"
+    put:
+      tags:
+        - Items
+      summary: update item.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+      responses:
+        204:
+          description: Success
+        400:
+          $ref: "#/components/schemas/Error"
+        500:
+          $ref: "#/components/schemas/Error"
+          
+  /items/{id}:
+    get:
+      tags:
+        - Items
+      summary: Get item by id.
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: number
+          required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        400:
+          $ref: "#/components/schemas/Error"
+        500:
+          $ref: "#/components/schemas/Error"
+        
+    delete:
+      tags:
+        - Items
+      summary: Delete item by id.
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: number
+          required: true
+      responses:
+        204:
+          description: Success
+        400:
+          $ref: "#/components/schemas/Error"
+        500:
+          $ref: "#/components/schemas/Error"
+  /items/{id}/prices:
+    get:
+      tags:
+        - Items
+      summary: Get item price by id.
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: number
+          required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Price'
+        400:
+          $ref: "#/components/schemas/Error"
+        500:
+          $ref: "#/components/schemas/Error"
+        
+  /sellers:
+    get:
+      tags:
+        - Seller
+      summary: Get list sellers.
+      parameters:
+        - $ref: '#/components/parameters/Order'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Seller'
+        400:
+          $ref: "#/components/schemas/Error"
+        500:
+          $ref: "#/components/schemas/Error"
+          
+    post:
+      tags:
+        - Seller
+      summary: Create seller.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Seller'
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Seller'
+        400:
+          $ref: "#/components/schemas/Error"
+        500:
+          $ref: "#/components/schemas/Error"
+          
+  /seller/{id}:
+    get:
+      tags:
+        - Seller
+      summary: Get seller by id.
+      parameters:
+        - name: id
+          in: path
+          schema:
+            type: number
+          required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Seller'
+        400:
+          $ref: "#/components/schemas/Error"
+        500:
+          $ref: "#/components/schemas/Error"
+     
+  /upload:
+    post:
+      tags:
+        - Parsers
+      summary: Upload data.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: csv
+      responses:
+        204:
+          description: Success
+        400:
+          $ref: "#/components/schemas/Error"
+        500:
+          $ref: "#/components/schemas/Error"
+      
+    
+
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: number
+          example: 5000
+        message:
+          type: string
+          example: Internal Server Error
+          
+    Item:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: items identifier
+        items_name:
+          type: string
+          description: Origin service items name
+        price_id:
+          type: number
+          description: Reference identifier of items price
+        origin:
+          type: string
+        origin_id:
+          type: integer
+          format: int64
+          description: Origin identifier
+        update_at:
+          type: string
+          format: datetime
+          example: 2002-12-10T10:10:00
+        created_at:
+          type: string
+          format: datetime
+          example: 2002-12-10T10:10:00
+          
+    Seller:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        origin_id:
+          type: integer
+          format: int64
+          description: origin identifier
+          
+    Price:
+      type: object
+      properties:
+        id: 
+          type: number
+          format: int64
+        item_id:
+          type: number
+          format: int64
+          description: reference identifier
+        created_at: 
+          type: string
+          format: datetime
+          example: 2002-12-10T10:10:00
+  parameters:
+    Limit:
+      in: query
+      name: limit
+      description: Number of items to get.
+      schema:
+        type: integer
+        minimum: 0
+        maximum: 100
+        default: 20
+        example: 20
+
+    Offset:
+      in: query
+      name: offset
+      description: Number of items to skip from the first found item.
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+        example: 20
+
+    Order:
+      in: query
+      name: order
+      description: Sort by value of specific column. If `-<column_name>` - sort in descending order.
+      schema:
+        type: string
+        pattern: '^-?\w+$'
+        example: -id
