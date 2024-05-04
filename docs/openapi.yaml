@@ -200,6 +200,28 @@ paths:
           $ref: "#/components/schemas/Error"
         500:
           $ref: "#/components/schemas/Error"
+     
+  /upload:
+    post:
+      tags:
+        - Parsers
+      summary: Upload data.
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: csv
+      responses:
+        204:
+          description: Success
+        400:
+          $ref: "#/components/schemas/Error"
+        500:
+          $ref: "#/components/schemas/Error"
       
     
 
