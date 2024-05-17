@@ -14,7 +14,7 @@ public class Users {
     private String login;
     private String password;
     private String email;
-
+    //В дальнейшем добавить токенизацию пользователей и доступ к апи только админам.
     public Users(){}
 
     public Users (String login, String password, String email)

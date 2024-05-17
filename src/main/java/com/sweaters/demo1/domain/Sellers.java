@@ -22,6 +22,8 @@ public class Sellers {
     private String seller_name;
     private String origin;
     private Long origin_id;
+    // Привести к дробному типу, из-за разницы отображений таких данных в разных маркетплейсах
+    // пока что было решено оставить в таком виде
     private String origin_rate;
 
     public Sellers() {
@@ -34,6 +36,7 @@ public class Sellers {
         this.origin_rate = origin_rate;
     }
 
+    // Конструктор с использованием данных парсера JSON
     public Sellers(JSONObject jsonObject) {
         this.seller_name = jsonObject.getString("seller_name");
         this.origin = jsonObject.getString("origin");

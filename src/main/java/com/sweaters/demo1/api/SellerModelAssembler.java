@@ -8,6 +8,7 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
+//Сборщик для продвацов
 @Component
 public class SellerModelAssembler implements RepresentationModelAssembler<Sellers, EntityModel<Sellers>> {
     public SellerModelAssembler() {

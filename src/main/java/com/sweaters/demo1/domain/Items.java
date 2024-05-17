@@ -18,6 +18,9 @@ public class Items {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long items_id;
     private String items_name;
+    //В целях текущей работоспособности цена имеет тип String, в дальнейшем нужно будет разделить
+    //саму цену и тип валюты, в зависимости конечно же от вида полученных данных
+    // В данном таблице будет показываться текущая цена
     private String price;
     private String origin;
     private Long origin_id;
@@ -37,6 +40,7 @@ public class Items {
         this.created_at = cal.getTime();
     }
 
+    // Конструктор с использованием данных парсера JSON
     public Items(JSONObject jsonObject) {
         this.items_name = jsonObject.getString("items_name");
         this.price = jsonObject.getString("price");

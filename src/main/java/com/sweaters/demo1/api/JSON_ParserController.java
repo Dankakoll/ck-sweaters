@@ -25,6 +25,7 @@ public class JSON_ParserController {
         this.json_parser = json_parser;
     }
 
+    //Загрузчик данных, использует уже готовые методы.
     @PostMapping(
             value = {"/upload"},
             consumes = {"application/json"}

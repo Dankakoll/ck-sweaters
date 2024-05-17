@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ItemsRepository extends JpaRepository<Items,Long> {
 
+    //Поиск по артикулу и по месту сбора данных
     @Query("select i from Items i where i.origin=?1 and i.origin_id=?2")
     Items findBySecondKey (String Origin, Long Origin_id);
 }

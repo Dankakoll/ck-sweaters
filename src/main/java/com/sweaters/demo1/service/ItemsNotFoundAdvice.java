@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+//Если не найден по Id, то выдавать ошибку
 @ControllerAdvice
 class ItemsNotFoundAdvice {
     @ResponseBody

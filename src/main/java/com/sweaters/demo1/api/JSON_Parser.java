@@ -13,6 +13,9 @@ public class JSON_Parser {
     {
     }
 
+    //Сборщик информации через JSON
+    //Можете использовать любой доступный скрепер, только их нужно либо привести к виду как в бд,
+    //либо написать маппер в соответствии с аттрибутами в вашем JSON файле.
     List<JSONArray> toData(String jsonObject) {
         JSONArray OG_JSON = new JSONArray(jsonObject);
         String[] SellerAtr = new String[]{"seller_name", "origin", "origin_rate", "origin_id"};

@@ -38,6 +38,7 @@ public class ItemController {
     private final ItemsRepository repository;
     private final ItemModelAssembler assembler;
 
+    //Таблицы Prices и Items связаны, поэтому обрабатываем в одном контроллере.
     private final PricesRepository pricesRepository;
     ItemController(ItemsRepository itemsRepository, ItemModelAssembler itemsAssembler,PricesRepository pricesRepository) {
         this.repository = itemsRepository;
@@ -45,6 +46,7 @@ public class ItemController {
         this.pricesRepository= pricesRepository;
     }
 
+    //Вывод всех элементов
     @GetMapping({"/items"})
     CollectionModel<EntityModel<Items>> all() {
         List<EntityModel<Items>> items = repository.findAll().stream()
@@ -52,12 +54,14 @@ public class ItemController {
         return CollectionModel.of (items,linkTo(methodOn (ItemController.class).all()).withSelfRel());
     }
 
+    //Вывод по Id
     @GetMapping({"/items/{Id}"})
     EntityModel<Items> findById(@PathVariable Long Id) {
         Items item = repository.findById(Id)
                 .orElseThrow(()->new ItemsNotFoundException(Id));
         return assembler.toModel(item);
     }
+    //Вывод всех цен по Id предмета (по артикулу и месту сбора)
     @GetMapping ("/items/{Id}/prices")
     List<Prices> allPricesById(@PathVariable Long Id)
     {
@@ -67,6 +71,9 @@ public class ItemController {
         return prices;
 
     }
+    //Добавление предмета с учетом существования
+    //Если добавить как один ключ (id,origin,origin_id),
+    //от проверки можно будет отказаться
     @PostMapping(
             value = {"/items"},
             consumes = {"application/json"}
@@ -90,6 +97,7 @@ public class ItemController {
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
 
+    //Замена предмета, пока не адаптированная для Prices
     @PutMapping({"/items"})
     ResponseEntity<?> replaceItem(@RequestBody Items items1, @PathVariable Long Id) {
         Items updated_item = repository.findById(Id).map((items) -> {
@@ -107,6 +115,7 @@ public class ItemController {
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri()).body(entityModel);
     }
 
+    //Удаление, также пока не адаптировано для Prices
     @DeleteMapping({"/items/{Id}"})
     ResponseEntity<?> deleteItems(@PathVariable Long Id) {
         this.repository.deleteById(Id);

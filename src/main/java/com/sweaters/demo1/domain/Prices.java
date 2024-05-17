@@ -7,6 +7,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name="prices")
+//Показ всей истории цен для определенного товара.
 public class Prices {
 
     @Id

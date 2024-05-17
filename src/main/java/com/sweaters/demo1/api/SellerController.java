@@ -36,6 +36,7 @@ public class SellerController {
         this.assembler = assembler;
     }
 
+    //Вывод всех продавцов
     @GetMapping({"/sellers"})
     CollectionModel<EntityModel<Sellers>> all() {
         List<EntityModel<Sellers>> sellers = repository.findAll().stream()
@@ -43,6 +44,7 @@ public class SellerController {
         return CollectionModel.of (sellers,linkTo(methodOn(SellerController.class).all()).withSelfRel());
     }
 
+    //Поиск по Id
     @GetMapping({"/sellers/{Id}"})
     EntityModel<Sellers> findById(@PathVariable Long Id) {
         Sellers sellers = repository.findById(Id)
@@ -50,6 +52,9 @@ public class SellerController {
         return assembler.toModel(sellers);
     }
 
+    //Добавление предмета с учетом существования продавца
+    // Если добавить как один ключ (id,origin,origin_id),
+    //от проверки можно будет отказаться
     @PostMapping(
             value = {"/sellers"},
             consumes = {"application/json"}
@@ -65,6 +70,7 @@ public class SellerController {
         return ResponseEntity.noContent().build();
 
     }
+    //Поиск по имени
     @GetMapping("/sellers/find_seller_by_name/{Seller_name}")
     CollectionModel<EntityModel<Sellers>> findBySeller_nameLike(@PathVariable String Seller_name)
     {
